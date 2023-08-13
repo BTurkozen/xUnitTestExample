@@ -10,7 +10,7 @@ namespace xUnitTestExample.Test
     public class CalculaterTest
     {
         [Fact]
-        public void AddTest()
+        public void AddEqualTest()
         {
             // ----------------------------- Arrange -----------------------------
 
@@ -30,6 +30,21 @@ namespace xUnitTestExample.Test
             // Act evresinden çıkan sonucun beklenen sonuç mu değil mi evresidir. Testin doğruluğunu kontrol ettiğimiz yerdir.
             Assert.Equal<int>(15, total);
             //Assert.NotEqual<int>(15, total);
+        }
+
+        [Fact]
+        public void AddContainTest()
+        {
+            var names = new List<string>()
+            {
+                "Burak",
+                "Deneme",
+                "Burada"
+            };
+
+            Assert.Contains(names, c => c == "Burak");
+
+            //Assert.DoesNotContain("Dayı", "Burak TÜRKÖZEN");
         }
     }
 }
