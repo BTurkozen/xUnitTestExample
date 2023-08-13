@@ -70,5 +70,19 @@ namespace xUnitTestExample.Test
             //Assert.StartsWith("bir", "bir masal");
             Assert.EndsWith("bir", "masal bir");
         }
+
+        [Fact]
+        public void AddEmptyOrNotEmptyTest()
+        {
+            //Assert.Empty(new List<string>());
+            Assert.NotEmpty(new List<string>() { "deneme" });
+        }
+
+        [Fact]
+        public void AddInRangeOrNoInRangeTest()
+        {
+            //Assert.InRange(10, 2, 20);
+            Assert.NotInRange(30, 2, 20);
+        }
     }
 }
