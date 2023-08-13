@@ -63,5 +63,12 @@ namespace xUnitTestExample.Test
             //Assert.Matches(regEx, "dog is an animal");
             Assert.DoesNotMatch(regEx, "is dog an animal");
         }
+
+        [Fact]
+        public void AddStartOrEndWithTest()
+        {
+            //Assert.StartsWith("bir", "bir masal");
+            Assert.EndsWith("bir", "masal bir");
+        }
     }
 }
