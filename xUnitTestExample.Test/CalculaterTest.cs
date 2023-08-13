@@ -46,5 +46,14 @@ namespace xUnitTestExample.Test
 
             //Assert.DoesNotContain("Dayı", "Burak TÜRKÖZEN");
         }
+
+        [Fact]
+        public void AddTrueorFalseTest()
+        {
+            //Assert.True(5 > 2);
+            //Assert.False(5 < 2);
+
+            Assert.True("".GetType() == typeof(string));
+        }
     }
 }
