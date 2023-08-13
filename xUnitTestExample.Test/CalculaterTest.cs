@@ -55,5 +55,13 @@ namespace xUnitTestExample.Test
 
             Assert.True("".GetType() == typeof(string));
         }
+
+        [Fact]
+        public void AddMacthesTest()
+        {
+            var regEx = "^dog";
+            //Assert.Matches(regEx, "dog is an animal");
+            Assert.DoesNotMatch(regEx, "is dog an animal");
+        }
     }
 }
