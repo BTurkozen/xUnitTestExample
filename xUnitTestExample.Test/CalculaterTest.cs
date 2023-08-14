@@ -2,6 +2,13 @@
 {
     public class CalculaterTest
     {
+        public Calculater Calculater { get; set; }
+
+        public CalculaterTest()
+        {
+            this.Calculater = new Calculater();
+        }
+
         [Fact]
         public void AddEqualFactTest()
         {
@@ -11,12 +18,12 @@
             int numberFirst = 5, numberSecond = 10;
 
             // Yada nesne örneği oluşturacağımnız yerdir.
-            var calculater = new Calculater();
+            //var calculater = new Calculater();
 
             // ----------------------------- Act -----------------------------
 
             // initialize ettiğimiz nesnelerimize parametreler verip test edeceğimiz methodları çalıştıracağımız yerdir.
-            var total = calculater.add(numberFirst, numberSecond);
+            var total = Calculater.add(numberFirst, numberSecond);
 
             // ----------------------------- Assert -----------------------------
 
