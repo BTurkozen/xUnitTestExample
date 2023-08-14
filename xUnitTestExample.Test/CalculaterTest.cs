@@ -44,5 +44,29 @@
             // Assert
             Assert.Equal(total, actualTotal);
         }
+
+        #region İsimlendirme Kurallına uygun şekilde revize edildi.
+
+        [Theory]
+        [InlineData(4, 5, 9)]
+        [InlineData(2, 8, 10)]
+        public void Add_SimpleValues_ReturnTotalValue(int firstNumber, int secondNumber, int expectedTotal)
+        {
+            var actualTotal = Calculater.add(firstNumber, secondNumber);
+
+            Assert.Equal(expectedTotal, actualTotal);
+        }
+
+        [Theory]
+        [InlineData(0, 5, 9)]
+        [InlineData(2, 0, 10)]
+        public void Add_ZeroValues_ReturnToZeroValue(int firstNumber, int secondNumber, int expectedTotal)
+        {
+            var actualTotal = Calculater.add(firstNumber, secondNumber);
+
+            Assert.NotEqual(expectedTotal, actualTotal);
+        }
+
+        #endregion
     }
 }
