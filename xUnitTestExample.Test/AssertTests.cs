@@ -131,5 +131,17 @@
         }
 
         #endregion
+
+        #region IsAssignableFrom
+
+        [Fact]
+        public void IsAssignableFromTest()
+        {
+            //Assert.IsAssignableFrom<IEnumerable<string>>(new List<string>() { });
+
+            Assert.IsAssignableFrom<Object>("");
+        }
+
+        #endregion
     }
 }
