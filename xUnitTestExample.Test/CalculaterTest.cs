@@ -3,7 +3,7 @@
     public class CalculaterTest
     {
         [Fact]
-        public void AddEqualTest()
+        public void AddEqualFactTest()
         {
             // ----------------------------- Arrange -----------------------------
 
@@ -23,6 +23,19 @@
             // Act evresinden çıkan sonucun beklenen sonuç mu değil mi evresidir. Testin doğruluğunu kontrol ettiğimiz yerdir.
             Assert.Equal<int>(15, total);
             //Assert.NotEqual<int>(15, total);
+        }
+
+        [Theory, InlineData(2, 5, 7), InlineData(2, 8, 10)]
+        public void AddEqualTheoryTest(int firstNumber, int secondNumber, int total)
+        {
+            // Arrange
+            var calculater = new Calculater();
+
+            // Act
+            int actualTotal = calculater.add(firstNumber, secondNumber);
+
+            // Assert
+            Assert.Equal(total, actualTotal);
         }
     }
 }
