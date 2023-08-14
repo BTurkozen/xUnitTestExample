@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using xUnitTestExample.APP;
-
-namespace xUnitTestExample.Test
+﻿namespace xUnitTestExample.Test
 {
     public class CalculaterTest
     {
@@ -30,65 +23,6 @@ namespace xUnitTestExample.Test
             // Act evresinden çıkan sonucun beklenen sonuç mu değil mi evresidir. Testin doğruluğunu kontrol ettiğimiz yerdir.
             Assert.Equal<int>(15, total);
             //Assert.NotEqual<int>(15, total);
-        }
-
-        [Fact]
-        public void AddContainTest()
-        {
-            var names = new List<string>()
-            {
-                "Burak",
-                "Deneme",
-                "Burada"
-            };
-
-            Assert.Contains(names, c => c == "Burak");
-
-            //Assert.DoesNotContain("Dayı", "Burak TÜRKÖZEN");
-        }
-
-        [Fact]
-        public void AddTrueorFalseTest()
-        {
-            //Assert.True(5 > 2);
-            //Assert.False(5 < 2);
-
-            Assert.True("".GetType() == typeof(string));
-        }
-
-        [Fact]
-        public void AddMacthesTest()
-        {
-            var regEx = "^dog";
-            //Assert.Matches(regEx, "dog is an animal");
-            Assert.DoesNotMatch(regEx, "is dog an animal");
-        }
-
-        [Fact]
-        public void AddStartOrEndWithTest()
-        {
-            //Assert.StartsWith("bir", "bir masal");
-            Assert.EndsWith("bir", "masal bir");
-        }
-
-        [Fact]
-        public void AddEmptyOrNotEmptyTest()
-        {
-            //Assert.Empty(new List<string>());
-            Assert.NotEmpty(new List<string>() { "deneme" });
-        }
-
-        [Fact]
-        public void AddInRangeOrNoInRangeTest()
-        {
-            //Assert.InRange(10, 2, 20);
-            Assert.NotInRange(30, 2, 20);
-        }
-
-        [Fact]
-        public void AddSingleTest()
-        {
-            Assert.Single<string>(new List<string>() { "denem" });
         }
     }
 }
