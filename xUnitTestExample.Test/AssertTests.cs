@@ -143,5 +143,44 @@
         }
 
         #endregion
+
+        #region Null / NotNull
+
+        [Fact]
+        public void NullTest()
+        {
+            string deger = null;
+
+            Assert.Null(deger);
+        }
+
+        [Fact]
+        public void NoNullTest()
+        {
+            string deger = "";
+
+            Assert.NotNull(deger);
+        }
+
+        #endregion
+
+        #region Equal / NotEqual
+
+        [Fact]
+        public void EqualTest()
+        {
+            int deger = 25;
+
+            Assert.Equal<int>(25, deger);
+        }
+
+        [Fact]
+        public void NotEqualTest()
+        {
+            int deger = 25;
+
+            Assert.Equal<int>(26, deger);
+        }
+        #endregion
     }
 }
