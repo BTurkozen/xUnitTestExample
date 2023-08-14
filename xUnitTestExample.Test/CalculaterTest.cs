@@ -84,5 +84,11 @@ namespace xUnitTestExample.Test
             //Assert.InRange(10, 2, 20);
             Assert.NotInRange(30, 2, 20);
         }
+
+        [Fact]
+        public void AddSingleTest()
+        {
+            Assert.Single<string>(new List<string>() { "denem" });
+        }
     }
 }
