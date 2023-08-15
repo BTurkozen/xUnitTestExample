@@ -9,6 +9,7 @@ namespace xUnitTestExample.Test
 
         public CalculaterTest()
         {
+            // Taklit edilecek Interface'i ayarlıyoruz.
             CalculaterMock = new Mock<ICalculaterService>();
             Calculater = new Calculater(CalculaterMock.Object);
         }
@@ -55,17 +56,22 @@ namespace xUnitTestExample.Test
         [InlineData(2, 8, 10)]
         public void Add_SimpleValues_ReturnTotalValue(int firstNumber, int secondNumber, int expectedTotal)
         {
-            // Taklit edilecek Interface'i ayarlıyoruz.
-            var myMock = new Mock<ICalculaterService>();
 
             // Kurulumu yapacağız. Burada davranış belirliyoruz.
             // Methodumuzu veriyoruz ve parametrelerini tanımlıyoruz.
             // Returns ile kabul edilmiş değerini giriyoruz. 
-            myMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
+            CalculaterMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
 
-            var actualTotal = Calculater.add(firstNumber, secondNumber);
+            Assert.Equal(expectedTotal, Calculater.add(firstNumber, secondNumber));
 
-            Assert.Equal(expectedTotal, actualTotal);
+            // Bir kere çalışma durumu Test ediliyor.
+            CalculaterMock.Verify(v => v.Add(firstNumber, secondNumber), Times.Once);
+
+            // Asla çalışmama durumunu Test eder.
+            CalculaterMock.Verify(v => v.Add(firstNumber, secondNumber), Times.Never);
+
+            // En az 2 kere çalıştığını Test eder.
+            CalculaterMock.Verify(v => v.Add(firstNumber, secondNumber), Times.AtLeast(2));
         }
 
         [Theory]
