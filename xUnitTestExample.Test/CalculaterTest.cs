@@ -4,14 +4,14 @@ namespace xUnitTestExample.Test
 {
     public class CalculaterTest
     {
-        public Calculater Calculater { get; set; }
+        public Calculater calculater { get; set; }
         public Mock<ICalculaterService> CalculaterMock { get; set; }
 
         public CalculaterTest()
         {
             // Taklit edilecek Interface'i ayarlıyoruz.
             CalculaterMock = new Mock<ICalculaterService>();
-            Calculater = new Calculater(CalculaterMock.Object);
+            calculater = new Calculater(CalculaterMock.Object);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace xUnitTestExample.Test
             // ----------------------------- Act -----------------------------
 
             // initialize ettiğimiz nesnelerimize parametreler verip test edeceğimiz methodları çalıştıracağımız yerdir.
-            var total = Calculater.add(numberFirst, numberSecond);
+            var total = calculater.add(numberFirst, numberSecond);
 
             // ----------------------------- Assert -----------------------------
 
@@ -43,7 +43,7 @@ namespace xUnitTestExample.Test
             // Arrange
 
             // Act
-            int actualTotal = Calculater.add(firstNumber, secondNumber);
+            int actualTotal = calculater.add(firstNumber, secondNumber);
 
             // Assert
             Assert.Equal(total, actualTotal);
@@ -62,7 +62,7 @@ namespace xUnitTestExample.Test
             // Returns ile kabul edilmiş değerini giriyoruz. 
             CalculaterMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
 
-            Assert.Equal(expectedTotal, Calculater.add(firstNumber, secondNumber));
+            Assert.Equal(expectedTotal, calculater.add(firstNumber, secondNumber));
 
             // Bir kere çalışma durumu Test ediliyor.
             CalculaterMock.Verify(v => v.Add(firstNumber, secondNumber), Times.Once);
@@ -79,7 +79,7 @@ namespace xUnitTestExample.Test
         [InlineData(2, 0, 10)]
         public void Add_ZeroValues_ReturnToZeroValue(int firstNumber, int secondNumber, int expectedTotal)
         {
-            var actualTotal = Calculater.add(firstNumber, secondNumber);
+            var actualTotal = calculater.add(firstNumber, secondNumber);
 
             Assert.NotEqual(expectedTotal, actualTotal);
         }
@@ -91,7 +91,7 @@ namespace xUnitTestExample.Test
         {
             CalculaterMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
 
-            Assert.NotEqual(expectedTotal, Calculater.add(firstNumber, secondNumber));
+            Assert.NotEqual(expectedTotal, calculater.add(firstNumber, secondNumber));
         }
 
         #endregion
@@ -104,9 +104,28 @@ namespace xUnitTestExample.Test
 
             CalculaterMock.Setup(s => s.Multip(firstNumber, secondNumber)).Throws(new Exception(exceptionMessage));
 
-            Exception exception = Assert.Throws<Exception>(() => Calculater.multip(firstNumber, secondNumber));
+            Exception exception = Assert.Throws<Exception>(() => calculater.multip(firstNumber, secondNumber));
 
             Assert.Equal(exceptionMessage, exception.Message);
+        }
+
+        [Theory]
+        [InlineData(2, 5, 10)]
+        public void MultipCallback_ZeroValue_ReturnException(int firstNumber, int secondNumber, int expectedTotal)
+        {
+            int actualMultip = 0;
+
+            CalculaterMock.Setup(s =>
+                                 s.Multip(It.IsAny<int>(), It.IsAny<int>()))
+                          .Callback<int, int>((x, y) => actualMultip = x * y);
+
+            calculater.multip(firstNumber, secondNumber);
+
+            Assert.Equal(expectedTotal, actualMultip);
+
+            calculater.multip(5, 20);
+
+            Assert.Equal(100, actualMultip);
         }
     }
 }
