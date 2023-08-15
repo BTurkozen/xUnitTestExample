@@ -1,12 +1,16 @@
-﻿namespace xUnitTestExample.Test
+﻿using Moq;
+
+namespace xUnitTestExample.Test
 {
     public class CalculaterTest
     {
         public Calculater Calculater { get; set; }
+        public Mock<ICalculaterService> CalculaterMock { get; set; }
 
         public CalculaterTest()
         {
-            this.Calculater = new Calculater();
+            CalculaterMock = new Mock<ICalculaterService>();
+            Calculater = new Calculater(CalculaterMock.Object);
         }
 
         [Fact]
@@ -36,10 +40,9 @@
         public void AddEqualTheoryTest(int firstNumber, int secondNumber, int total)
         {
             // Arrange
-            var calculater = new Calculater();
 
             // Act
-            int actualTotal = calculater.add(firstNumber, secondNumber);
+            int actualTotal = Calculater.add(firstNumber, secondNumber);
 
             // Assert
             Assert.Equal(total, actualTotal);
@@ -52,6 +55,14 @@
         [InlineData(2, 8, 10)]
         public void Add_SimpleValues_ReturnTotalValue(int firstNumber, int secondNumber, int expectedTotal)
         {
+            // Taklit edilecek Interface'i ayarlıyoruz.
+            var myMock = new Mock<ICalculaterService>();
+
+            // Kurulumu yapacağız. Burada davranış belirliyoruz.
+            // Methodumuzu veriyoruz ve parametrelerini tanımlıyoruz.
+            // Returns ile kabul edilmiş değerini giriyoruz. 
+            myMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
+
             var actualTotal = Calculater.add(firstNumber, secondNumber);
 
             Assert.Equal(expectedTotal, actualTotal);
