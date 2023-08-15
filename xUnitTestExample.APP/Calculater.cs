@@ -8,11 +8,16 @@ namespace xUnitTestExample.APP
 {
     public class Calculater
     {
+        private readonly ICalculaterService _calculaterService;
+
+        public Calculater(ICalculaterService calculaterService)
+        {
+            _calculaterService = calculaterService;
+        }
+
         public int add(int firstNumber, int secondNumber)
         {
-            if (firstNumber == 0 || secondNumber == 0) return 0;
-
-            return firstNumber + secondNumber;
+            return _calculaterService.Add(firstNumber, secondNumber);
         }
     }
 }
