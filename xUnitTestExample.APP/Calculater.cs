@@ -19,5 +19,10 @@ namespace xUnitTestExample.APP
         {
             return _calculaterService.Add(firstNumber, secondNumber);
         }
+
+        public int multip(int firstNumber, int secondNumber)
+        {
+            return _calculaterService.Multip(firstNumber, secondNumber);
+        }
     }
 }

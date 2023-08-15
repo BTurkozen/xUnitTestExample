@@ -14,5 +14,15 @@ namespace xUnitTestExample.APP
 
             return firstNumber + secondNumber;
         }
+
+        public int Multip(int firstNumber, int secondNumber)
+        {
+            if (firstNumber == 0 || secondNumber == 0)
+            {
+                throw new Exception("firstNumber veya secondNumber not  value equal 0");
+            }
+
+            return firstNumber * secondNumber;
+        }
     }
 }

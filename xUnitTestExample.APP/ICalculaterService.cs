@@ -9,5 +9,6 @@ namespace xUnitTestExample.APP
     public interface ICalculaterService
     {
         int Add(int firstNumber, int secondNumber);
+        int Multip(int firstNumber, int secondNumber);
     }
 }

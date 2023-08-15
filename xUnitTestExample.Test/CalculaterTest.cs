@@ -84,6 +84,29 @@ namespace xUnitTestExample.Test
             Assert.NotEqual(expectedTotal, actualTotal);
         }
 
+        [Theory]
+        [InlineData(0, 5, 9)]
+        [InlineData(2, 0, 10)]
+        public void AddMoqThrows_ZeroValues_ReturnToZeroValue(int firstNumber, int secondNumber, int expectedTotal)
+        {
+            CalculaterMock.Setup(s => s.Add(firstNumber, secondNumber)).Returns(expectedTotal);
+
+            Assert.NotEqual(expectedTotal, Calculater.add(firstNumber, secondNumber));
+        }
+
         #endregion
+
+        [Theory]
+        [InlineData(1, 0)]
+        public void MultipThrows_ZeroValue_ReturnException(int firstNumber, int secondNumber)
+        {
+            var exceptionMessage = "firstNumber veya secondNumber not  value equal 0";
+
+            CalculaterMock.Setup(s => s.Multip(firstNumber, secondNumber)).Throws(new Exception(exceptionMessage));
+
+            Exception exception = Assert.Throws<Exception>(() => Calculater.multip(firstNumber, secondNumber));
+
+            Assert.Equal(exceptionMessage, exception.Message);
+        }
     }
 }
