@@ -25,9 +25,9 @@ if (dataContext.Products.Any() is false)
 {
     var products = new List<Product>
     {
-        new Product{ Name = "Book", Quantity = 1, Price = 10},
-        new Product{ Name = "Computer", Quantity = 12, Price = 110},
-        new Product{ Name = "Mouse", Quantity = 14, Price = 50},
+        new Product{ Name = "Book", Quantity = 1, Price = 10,Color="red"},
+        new Product{ Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
+        new Product{ Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
     };
 
     await dataContext.Products.AddRangeAsync(products);
