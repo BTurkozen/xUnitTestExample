@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using xUnitTestExample.Web.Models;
+using xUnitTestExample.Web.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

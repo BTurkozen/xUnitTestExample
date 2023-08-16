@@ -24,7 +24,7 @@ namespace xUnitTestExample.Web.Repository
 
         public async Task DeleteAsync(TEntity entity)
         {
-            _dataContext.Entry(entity).State = EntityState.Deleted;
+            _dbSet.Remove(entity);
 
             await _dataContext.SaveChangesAsync();
         }
