@@ -6,36 +6,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using xUnitTestExample.Web.Models;
+using xUnitTestExample.Web.Repository;
 
 namespace xUnitTestExample.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IRepository<Product> _productRepo;
 
-        public ProductsController(DataContext context)
+        public ProductsController(IRepository<Product> productRepo)
         {
-            _context = context;
+            _productRepo = productRepo;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.AnyAsync() ?await _context.Products.ToListAsync() : null;
-
-            return View(products);
+            return View(await _productRepo.GetAllAsync());
         }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || await _productRepo.GetByIdAsync(id.Value) == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productRepo.GetByIdAsync(id.Value);
+
             if (product == null)
             {
                 return NotFound();
@@ -50,17 +49,14 @@ namespace xUnitTestExample.Web.Controllers
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Quantity,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                await _productRepo.CreateAsync(product);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -69,16 +65,18 @@ namespace xUnitTestExample.Web.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || await _productRepo.GetByIdAsync(id.Value) == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productRepo.GetByIdAsync(id.Value);
+
             if (product == null)
             {
                 return NotFound();
             }
+
             return View(product);
         }
 
@@ -98,12 +96,11 @@ namespace xUnitTestExample.Web.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    await _productRepo.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (await ProductExists(product.Id) is false)
                     {
                         return NotFound();
                     }
@@ -120,13 +117,13 @@ namespace xUnitTestExample.Web.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productRepo.GetByIdAsync(id.Value);
+
             if (product == null)
             {
                 return NotFound();
@@ -140,23 +137,23 @@ namespace xUnitTestExample.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Products == null)
+            if (await _productRepo.GetByIdAsync(id) is not null)
             {
-                return Problem("Entity set 'DataContext.Products'  is null.");
-            }
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
+                var product = await _productRepo.GetByIdAsync(id);
+
+                await _productRepo.DeleteAsync(product);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private async Task<bool> ProductExists(int id)
         {
-            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            var products = await _productRepo.GetAllAsync();
+
+            var isReturn = (products?.Any(e => e.Id == id)).GetValueOrDefault();
+
+            return isReturn;
         }
     }
 }
