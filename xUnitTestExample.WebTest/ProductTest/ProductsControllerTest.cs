@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,14 @@ namespace xUnitTestExample.WebTest.ProductTest
                 new Product{ Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
                 new Product{ Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
             };
+        }
+
+        [Fact]
+        public async void INdex_ActionExecutes_ReturnView()
+        {
+            var result = await _productsController.Index();
+
+            Assert.IsType<ViewResult>(result);
         }
     }
 }
