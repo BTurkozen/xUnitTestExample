@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 using xUnitTestExample.Web.Models;
 using xUnitTestExample.Web.Repository;
 
@@ -21,6 +20,20 @@ var providerService = scope.ServiceProvider;
 var dataContext = providerService.GetRequiredService<DataContext>();
 
 dataContext.Database.Migrate();
+
+if (dataContext.Products.Any() is false)
+{
+    var products = new List<Product>
+    {
+        new Product{ Name = "Book", Quantity = 1, Price = 10},
+        new Product{ Name = "Computer", Quantity = 12, Price = 110},
+        new Product{ Name = "Mouse", Quantity = 14, Price = 50},
+    };
+
+    await dataContext.Products.AddRangeAsync(products);
+
+    await dataContext.SaveChangesAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
