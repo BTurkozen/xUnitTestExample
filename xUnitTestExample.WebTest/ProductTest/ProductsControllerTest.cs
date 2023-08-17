@@ -28,6 +28,7 @@ namespace xUnitTestExample.WebTest.ProductTest
             };
         }
 
+        #region Index Action
         [Fact]
         public async void Index_ActionExecutes_ReturnView()
         {
@@ -49,7 +50,9 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal<int>(3, productList.Count());
         }
+        #endregion
 
+        #region Detail Action
         [Fact]
         public async void Detail_IdIsNull_ReturnRedirectToIndexAction()
         {
@@ -91,7 +94,9 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal(product.Name, resultProduct.Name);
         }
+        #endregion
 
+        #region Create Action
         [Fact]
         public void Create_ActionExecute_ReturnViewResult()
         {
@@ -99,6 +104,19 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.IsType<ViewResult>(result);
         }
+
+        [Fact]
+        public async void Create_InvalidModelState_ReturnViewResult()
+        {
+            _productsController.ModelState.AddModelError("Name", "Name is required");
+
+            var result = await _productsController.Create(_products.First());
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Product>(viewResult.Model);
+        }
+        #endregion
 
     }
 }
