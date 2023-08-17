@@ -18,7 +18,7 @@ namespace xUnitTestExample.WebTest.ProductTest
         private List<Product> _products;
         public ProductsControllerTest()
         {
-            _mockRepo = new Mock<IRepository<Product>>();
+            _mockRepo = new Mock<IRepository<Product>>(MockBehavior.Loose);
             _productsController = new ProductsController(_mockRepo.Object);
             _products = new List<Product>
             {
@@ -115,6 +115,21 @@ namespace xUnitTestExample.WebTest.ProductTest
             var viewResult = Assert.IsType<ViewResult>(result);
 
             Assert.IsType<Product>(viewResult.Model);
+        }
+
+        [Fact]
+        public async void Create_ValidModelState_ReturnRedirectToActionResult()
+        {
+            // Mocklama işleminde mocklanacakmı mocklanmayacakmı bunun kararını 
+            // MockBehavior.Strict => İlgili dependencylerin hepsini mocklanması gerekmektedir.
+            // MockBehavior.Loose(varsayılandır) => Methodla işiniz yoksa mocklanmasına gerekmemektedir.
+            // İçerisindeki methodla ilgili bir işlem kontrol etmemiz gerekmiyorsa mocklanmasına gerekyoktur.
+
+            var result = await _productsController.Create(_products.First());
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal(nameof(Index), redirect.ActionName);
         }
         #endregion
 
