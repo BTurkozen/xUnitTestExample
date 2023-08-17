@@ -22,9 +22,9 @@ namespace xUnitTestExample.WebTest.ProductTest
             _productsController = new ProductsController(_mockRepo.Object);
             _products = new List<Product>
             {
-                new Product{ Id = 4, Name = "Book", Quantity = 1, Price = 10,Color="red"},
-                new Product{ Id = 5, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
-                new Product{ Id = 6, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
+                new Product{ Id = 7, Name = "Book", Quantity = 1, Price = 10,Color="red"},
+                new Product{ Id = 8, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
+                new Product{ Id = 9, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
             };
         }
 
@@ -77,7 +77,7 @@ namespace xUnitTestExample.WebTest.ProductTest
         }
 
         [Theory]
-        [InlineData(4)]
+        [InlineData(7)]
         public async void Detail_ValidId_ReturnProduct(int productId)
         {
             Product product = _products.First(p => p.Id == productId);
@@ -130,6 +130,21 @@ namespace xUnitTestExample.WebTest.ProductTest
             var redirect = Assert.IsType<RedirectToActionResult>(result);
 
             Assert.Equal(nameof(Index), redirect.ActionName);
+        }
+
+        [Fact]
+        public async void Create_ValidModelState_CreateMethodExecute()
+        {
+            Product newProduct = null;
+
+            _mockRepo.Setup(s => s.CreateAsync(It.IsAny<Product>()))
+                     .Callback<Product>(p => p = newProduct);
+
+            var result = await _productsController.Create(_products.First());
+
+            _mockRepo.Verify(v => v.CreateAsync(It.IsAny<Product>()), Times.Once);
+
+            Assert.Equal(_products.First().Id, newProduct.Id);
         }
         #endregion
 
