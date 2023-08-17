@@ -91,5 +91,14 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal(product.Name, resultProduct.Name);
         }
+
+        [Fact]
+        public void Create_ActionExecute_ReturnViewResult()
+        {
+            var result = _productsController.Create();
+
+            Assert.IsType<ViewResult>(result);
+        }
+
     }
 }
