@@ -30,7 +30,7 @@ namespace xUnitTestExample.Web.Controllers
         {
             if (id == null || await _productRepo.GetByIdAsync(id.Value) == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var product = await _productRepo.GetByIdAsync(id.Value);

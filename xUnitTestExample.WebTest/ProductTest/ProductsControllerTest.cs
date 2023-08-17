@@ -49,5 +49,15 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal<int>(3, productList.Count());
         }
+
+        [Fact]
+        public async void Detail_IdIsNull_ReturnRedirectToIndexAction()
+        {
+            var result = await _productsController.Details(null);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
     }
 }
