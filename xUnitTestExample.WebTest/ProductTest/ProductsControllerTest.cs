@@ -59,5 +59,18 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal("Index", redirect.ActionName);
         }
+
+        [Fact]
+        public async void Detail_IdInvalid_ReturnNotFound()
+        {
+            Product product = null;
+            _mockRepo.Setup(s => s.GetByIdAsync(0)).ReturnsAsync(product);
+
+            var result = await _productsController.Details(0);
+
+            var redirect = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal<int>(404, redirect.StatusCode);
+        }
     }
 }

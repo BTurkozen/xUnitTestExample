@@ -28,7 +28,7 @@ namespace xUnitTestExample.Web.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || await _productRepo.GetByIdAsync(id.Value) == null)
+            if (id == null)
             {
                 return RedirectToAction(nameof(Index));
             }
