@@ -22,9 +22,9 @@ namespace xUnitTestExample.WebTest.ProductTest
             _productsController = new ProductsController(_mockRepo.Object);
             _products = new List<Product>
             {
-                new Product{ Name = "Book", Quantity = 1, Price = 10,Color="red"},
-                new Product{ Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
-                new Product{ Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
+                new Product{ Id = 4, Name = "Book", Quantity = 1, Price = 10,Color="red"},
+                new Product{ Id = 5, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
+                new Product{ Id = 6, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
             };
         }
 
@@ -71,6 +71,25 @@ namespace xUnitTestExample.WebTest.ProductTest
             var redirect = Assert.IsType<NotFoundResult>(result);
 
             Assert.Equal<int>(404, redirect.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        public async void Detail_ValidId_ReturnProduct(int productId)
+        {
+            Product product = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.GetByIdAsync(product.Id)).ReturnsAsync(product);
+
+            var result = await _productsController.Details(productId);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            var resultProduct = Assert.IsAssignableFrom<Product>(viewResult.Model);
+
+            Assert.Equal(productId, resultProduct.Id);
+
+            Assert.Equal(product.Name, resultProduct.Name);
         }
     }
 }
