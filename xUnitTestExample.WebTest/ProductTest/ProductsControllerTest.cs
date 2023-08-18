@@ -172,7 +172,20 @@ namespace xUnitTestExample.WebTest.ProductTest
             Assert.Equal("Index", redirect.ActionName);
         }
 
+        [Theory]
+        [InlineData(12)]
+        public async void Edit_IdInvalid_ReturnNotFound(int productId)
+        {
+            Product product = null;
 
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsController.Edit(productId);
+
+            var notFound = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal(404, notFound.StatusCode);
+        }
 
         #endregion
 
