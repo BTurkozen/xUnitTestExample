@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -146,6 +147,17 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal(_products.First().Id, newProduct.Id);
         }
+
+        [Fact]
+        public async void Create_InValidModelState_NewverCreateExecute()
+        {
+            _productsController.ModelState.AddModelError("Name", "Name is required");
+
+            var result = await _productsController.Create(_products.First());
+
+            _mockRepo.Verify(r => r.CreateAsync(It.IsAny<Product>()), Times.Never);
+        }
+
         #endregion
 
     }
