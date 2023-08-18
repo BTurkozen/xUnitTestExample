@@ -23,7 +23,7 @@ namespace xUnitTestExample.WebTest.ProductTest
             _productsController = new ProductsController(_mockRepo.Object);
             _products = new List<Product>
             {
-                new Product{ Id = 7, Name = "Book", Quantity = 1, Price = 10,Color="red"},
+                new Product{ Id = 4, Name = "Book", Quantity = 1, Price = 10,Color="red"},
                 new Product{ Id = 8, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
                 new Product{ Id = 9, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
             };
@@ -185,6 +185,25 @@ namespace xUnitTestExample.WebTest.ProductTest
             var notFound = Assert.IsType<NotFoundResult>(result);
 
             Assert.Equal(404, notFound.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        public async void Edit_ActionExecute_ReturnViewResult(int productId)
+        {
+            Product product = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsController.Edit(productId);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            var resultProduct = Assert.IsAssignableFrom<Product>(viewResult.Model);
+
+            Assert.Equal(product.Id, resultProduct.Id);
+
+            Assert.Equal(product.Name, resultProduct.Name);
         }
 
         #endregion
