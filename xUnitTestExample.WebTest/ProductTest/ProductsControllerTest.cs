@@ -160,5 +160,21 @@ namespace xUnitTestExample.WebTest.ProductTest
 
         #endregion
 
+        #region Edit Action
+
+        [Fact]
+        public async void Edit_IdIsNull_ReturnRedirectToAction()
+        {
+            var result = await _productsController.Edit(null);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
+
+
+
+        #endregion
+
     }
 }

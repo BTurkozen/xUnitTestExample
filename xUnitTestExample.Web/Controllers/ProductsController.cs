@@ -65,9 +65,9 @@ namespace xUnitTestExample.Web.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || await _productRepo.GetByIdAsync(id.Value) == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var product = await _productRepo.GetByIdAsync(id.Value);
