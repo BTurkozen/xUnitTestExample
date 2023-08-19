@@ -73,5 +73,16 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal(productId, returnProduct.Id);
         }
+
+        [Theory]
+        [InlineData(4)]
+        public async void PutProduct_IdIsNotEqualProduct_ReturnBadRequestResult(int productId)
+        {
+            var product = _products.First(p => p.Id == productId);
+
+            var result = await _productsApiController.PutProduct(5, product);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
     }
 }
