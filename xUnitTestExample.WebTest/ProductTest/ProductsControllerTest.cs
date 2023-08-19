@@ -238,6 +238,19 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal("Index", redirect.ActionName);
         }
+
+        [Theory]
+        [InlineData(4)]
+        public async void Edit_ValidModelState_UpdateMethodExecute(int productId)
+        {
+            var updatedProduct = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.UpdateAsync(updatedProduct));
+
+            await _productsController.Edit(productId, updatedProduct);
+
+            _mockRepo.Verify(v => v.UpdateAsync(It.IsAny<Product>()), Times.Once);
+        }
         #endregion
 
     }
