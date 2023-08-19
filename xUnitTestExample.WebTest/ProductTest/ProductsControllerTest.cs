@@ -262,6 +262,21 @@ namespace xUnitTestExample.WebTest.ProductTest
             var viewResult = Assert.IsType<NotFoundResult>(result);
         }
 
+        [Theory]
+        [InlineData(99)]
+        public async void Delete_IdIsNotEqualProduct_ReturnNotFound(int productId)
+        {
+            Product product = null;
+
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsController.Delete(productId);
+
+            var viewResult = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal(404, viewResult.StatusCode);
+        }
+
         #endregion
 
     }
