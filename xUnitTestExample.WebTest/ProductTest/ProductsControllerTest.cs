@@ -206,6 +206,14 @@ namespace xUnitTestExample.WebTest.ProductTest
             Assert.Equal(product.Name, resultProduct.Name);
         }
 
+        [Theory]
+        [InlineData(4)]
+        public async void Edit_IdIsNotEqualProduct_ReturnNotFound(int productId)
+        {
+            var result = await _productsController.Edit(2, _products.First(p => p.Id == productId));
+
+            var redirect = Assert.IsType<NotFoundResult>(result);
+        }
         #endregion
 
     }
