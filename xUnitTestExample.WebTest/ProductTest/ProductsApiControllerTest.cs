@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,23 @@ namespace xUnitTestExample.WebTest.ProductTest
             _products = new List<Product>
             {
                 new Product{ Id = 4, Name = "Book", Quantity = 1, Price = 10,Color="red"},
-                new Product{ Id = 8, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
-                new Product{ Id = 9, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
+                new Product{ Id = 5, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
+                new Product{ Id = 6, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
             };
+        }
+
+        [Fact]
+        public async void GetProducts_ActionExecute_ReturnOkResultWithProduct()
+        {
+            _mockRepo.Setup(s => s.GetAllAsync()).ReturnsAsync(_products);
+
+            var result = await _productsApiController.GetProducts();
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+
+            var returnProduct = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value);
+
+            Assert.Equal<int>(_products.Count, returnProduct.ToList().Count);
         }
     }
 }
