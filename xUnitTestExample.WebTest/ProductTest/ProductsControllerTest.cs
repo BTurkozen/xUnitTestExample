@@ -307,6 +307,21 @@ namespace xUnitTestExample.WebTest.ProductTest
             Assert.Equal("Index", viewResult.ActionName);
         }
 
+        [Theory]
+        [InlineData(4)]
+        public async void DeleteConfirmed_ActionExecutes_DeleteMethodExecute(int productId)
+        {
+            var product = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.DeleteAsync(product));
+
+            await _productsController.DeleteConfirmed(productId);
+
+            _mockRepo.Verify(v => v.DeleteAsync(It.IsAny<Product>()), Times.Once);
+
+
+        }
+
         #endregion
 
     }

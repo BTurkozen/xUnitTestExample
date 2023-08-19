@@ -137,12 +137,9 @@ namespace xUnitTestExample.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _productRepo.GetByIdAsync(id) is not null)
-            {
-                var product = await _productRepo.GetByIdAsync(id);
+            var product = await _productRepo.GetByIdAsync(id);
 
-                await _productRepo.DeleteAsync(product);
-            }
+            await _productRepo.DeleteAsync(product);
 
             return RedirectToAction(nameof(Index));
         }
