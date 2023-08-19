@@ -227,6 +227,17 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.IsType<Product>(viewResult.Model);
         }
+
+        [Theory]
+        [InlineData(4)]
+        public async void Edit_ValidModelState_ReturnRTA(int productId)
+        {
+            var result = await _productsController.Edit(productId, _products.First(p => p.Id == productId));
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
         #endregion
 
     }
