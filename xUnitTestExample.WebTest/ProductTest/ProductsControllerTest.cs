@@ -277,6 +277,21 @@ namespace xUnitTestExample.WebTest.ProductTest
             Assert.Equal(404, viewResult.StatusCode);
         }
 
+        [Theory]
+        [InlineData(4)]
+        public async void Delete_ActionExecute_ReturnProduct(int productId)
+        {
+            Product product = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsController.Delete(productId);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsAssignableFrom<Product>(viewResult.Model);
+        }
+
         #endregion
 
     }
