@@ -55,5 +55,23 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.IsType<NotFoundResult>(result);
         }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(5)]
+        public async void GetProduct_IdValid_ReturnOkResult(int productId)
+        {
+            var product = _products.First(p => p.Id == productId);
+
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsApiController.GetProduct(productId);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+
+            var returnProduct = Assert.IsType<Product>(okResult.Value);
+
+            Assert.Equal(productId, returnProduct.Id);
+        }
     }
 }
