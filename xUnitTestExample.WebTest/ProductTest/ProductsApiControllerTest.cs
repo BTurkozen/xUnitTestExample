@@ -84,5 +84,22 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.IsType<BadRequestResult>(result);
         }
+
+        [Theory]
+        [InlineData(4)]
+        public async void PutProduct_ActionExecute_ReturnNoContent(int productId)
+        {
+            var product = _products.First(x => x.Id == productId);
+
+            _mockRepo.Setup(s => s.UpdateAsync(product));
+
+            var result = await _productsApiController.PutProduct(productId, product);
+
+            _mockRepo.Verify(v => v.UpdateAsync(product), Times.Once);
+
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+
+            Assert.IsType<NoContentResult>(noContentResult);
+        }
     }
 }
