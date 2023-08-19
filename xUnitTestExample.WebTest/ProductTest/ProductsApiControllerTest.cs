@@ -26,6 +26,7 @@ namespace xUnitTestExample.WebTest.ProductTest
                 new Product{ Id = 4, Name = "Book", Quantity = 1, Price = 10,Color="red"},
                 new Product{ Id = 5, Name = "Computer", Quantity = 12, Price = 110,Color= "green"},
                 new Product{ Id = 6, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
+                new Product{ Id = 19, Name = "Glass", Quantity = 14, Price = 50, Color = "white"},
             };
         }
 
@@ -100,6 +101,23 @@ namespace xUnitTestExample.WebTest.ProductTest
             var noContentResult = Assert.IsType<NoContentResult>(result);
 
             Assert.IsType<NoContentResult>(noContentResult);
+        }
+
+        [Fact]
+        public async void PostProduct_ActionExecute_ReturnCreateAtAction()
+        {
+            Product product = _products.Last();
+
+            _mockRepo.Setup(s => s.CreateAsync(product)).Returns(Task.CompletedTask);
+
+            var result = await _productsApiController.PostProduct(product);
+
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
+
+            _mockRepo.Verify(v => v.CreateAsync(product), Times.Once);
+
+            Assert.Equal("GetProduct", createdAtActionResult.ActionName);
+
         }
     }
 }
