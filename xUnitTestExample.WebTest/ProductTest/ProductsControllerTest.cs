@@ -253,5 +253,16 @@ namespace xUnitTestExample.WebTest.ProductTest
         }
         #endregion
 
+        #region Delete Action
+        [Fact]
+        public async void Delete_IdIsNull_ReturnNotFound()
+        {
+            var result = await _productsController.Delete(null);
+
+            var viewResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+        #endregion
+
     }
 }
