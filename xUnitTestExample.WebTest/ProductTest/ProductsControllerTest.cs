@@ -294,5 +294,20 @@ namespace xUnitTestExample.WebTest.ProductTest
 
         #endregion
 
+        #region DeleteConfirmed Action
+
+        [Theory]
+        [InlineData(4)]
+        public async void DeleteConfirmed_ActionExecutes_ReturnRedirectToIndexAction(int productId)
+        {
+            var result = await _productsController.DeleteConfirmed(productId);
+
+            var viewResult = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", viewResult.ActionName);
+        }
+
+        #endregion
+
     }
 }
