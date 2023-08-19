@@ -214,6 +214,19 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             var redirect = Assert.IsType<NotFoundResult>(result);
         }
+
+        [Theory]
+        [InlineData(4)]
+        public async void Edit_InValidModelState_ReturnView(int productId)
+        {
+            _productsController.ModelState.AddModelError("Name", "Name is required");
+
+            var result = await _productsController.Edit(productId, _products.First(p => p.Id == productId));
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Product>(viewResult.Model);
+        }
         #endregion
 
     }
