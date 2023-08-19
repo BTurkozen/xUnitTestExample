@@ -119,5 +119,23 @@ namespace xUnitTestExample.WebTest.ProductTest
             Assert.Equal("GetProduct", createdAtActionResult.ActionName);
 
         }
+
+        [Theory]
+        [InlineData(0)]
+        public async void DeleteProduct_IdInValid_ReturnNotFound(int productId)
+        {
+            Product product = null;
+
+            _mockRepo.Setup(s => s.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            var result = await _productsApiController.DeleteProduct(productId);
+
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        //[Theory]
+        //[InlineData(4)]
+        //public async void DeleteProduct_ActionExecute_ReturnNoContentResult(int producId) { }
+
     }
 }
