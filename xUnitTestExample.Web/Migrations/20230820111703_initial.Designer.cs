@@ -11,8 +11,8 @@ using xUnitTestExample.Web.Models;
 namespace xUnitTestExample.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230816200615_addedColorToProduct")]
-    partial class addedColorToProduct
+    [Migration("20230820111703_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,35 @@ namespace xUnitTestExample.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("xUnitTestExample.Web.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Pens"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Wheels"
+                        });
+                });
+
             modelBuilder.Entity("xUnitTestExample.Web.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -31,6 +60,9 @@ namespace xUnitTestExample.Web.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -49,7 +81,25 @@ namespace xUnitTestExample.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("xUnitTestExample.Web.Models.Product", b =>
+                {
+                    b.HasOne("xUnitTestExample.Web.Models.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("xUnitTestExample.Web.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
