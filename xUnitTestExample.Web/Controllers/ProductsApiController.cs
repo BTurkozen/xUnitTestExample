@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using xUnitTestExample.Web.Helpers;
 using xUnitTestExample.Web.Models;
 using xUnitTestExample.Web.Repository;
 
@@ -28,6 +29,12 @@ namespace xUnitTestExample.Web.Controllers
             var products = await _productRepo.GetAllAsync();
 
             return Ok(products);
+        }
+
+        [HttpGet("{firstNumber}/{secondNumber}")]
+        public IActionResult Add(int firstNumber, int secondNumber)
+        {
+            return Ok(new Helper().add(firstNumber, secondNumber));
         }
 
         // GET: api/ProductsApi/5

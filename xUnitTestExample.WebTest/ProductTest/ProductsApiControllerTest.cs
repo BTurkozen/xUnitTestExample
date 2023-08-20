@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using xUnitTestExample.Web.Controllers;
+using xUnitTestExample.Web.Helpers;
 using xUnitTestExample.Web.Models;
 using xUnitTestExample.Web.Repository;
 
@@ -16,6 +17,7 @@ namespace xUnitTestExample.WebTest.ProductTest
         private readonly Mock<IRepository<Product>> _mockRepo;
         private readonly ProductsApiController _productsApiController;
         private List<Product> _products;
+        private readonly Helper _helper;
 
         public ProductsApiControllerTest()
         {
@@ -28,6 +30,7 @@ namespace xUnitTestExample.WebTest.ProductTest
                 new Product{ Id = 6, Name = "Mouse", Quantity = 14, Price = 50, Color = "purple"},
                 new Product{ Id = 19, Name = "Glass", Quantity = 14, Price = 50, Color = "white"},
             };
+            _helper = new Helper();
         }
 
         [Fact]
@@ -148,6 +151,15 @@ namespace xUnitTestExample.WebTest.ProductTest
             _mockRepo.Verify(v => v.DeleteAsync(product), Times.Once());
 
             Assert.IsType<NoContentResult>(noContentResult);
+        }
+
+        [Theory]
+        [InlineData(4, 5, 9)]
+        public void Add_SampleValues_ReturnTotal(int firstNumber, int secondNumber,int toltal)
+        {
+            var result = _helper.add(firstNumber, secondNumber);
+
+            Assert.Equal(toltal, result);
         }
 
     }
