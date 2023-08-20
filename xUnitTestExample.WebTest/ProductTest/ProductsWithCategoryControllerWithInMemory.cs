@@ -43,5 +43,25 @@ namespace xUnitTestExample.WebTest.ProductTest
 
             Assert.Equal(newProduct.Name, product.Name);
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task DeleteCategory_ExistCategoryId_DeleteAllProducts(int categoryId)
+        {
+            using var context = new DataContext(_dbContextOptions);
+
+            var category = await context.Categories.FindAsync(categoryId);
+
+            context.Categories.Remove(category);
+
+            await context.SaveChangesAsync();
+
+            using var contextCheck = new DataContext(_dbContextOptions);
+
+            var products = await contextCheck.Products.Where(p => p.CategoryId == categoryId).ToListAsync();
+
+            // İnMemory olduğu için ilişkisel vertabanı durumundan dolayı hata geliyor.
+            Assert.Empty(products);
+        }
     }
 }
